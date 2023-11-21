@@ -6,14 +6,16 @@ type Matrix<'t, 'nRows, 'nCols
     when 't :> INumber<'t>
     and 'nRows :> Natural
     and 'nCols :> Natural> =
-    private MkMatrix of 't[,] with
+    private { Values : 't[,] }
 
     member matrix.Item
         with get(iRow, iCol) =
-            let (MkMatrix values) = matrix
-            values[iRow, iCol]
+            matrix.Values[iRow, iCol]
 
 module Matrix =
+
+    let private create values =
+        { Values = values }
 
     let zeroCreate<'t, 'nRows, 'nCols
         when 't :> INumber<'t>
@@ -21,7 +23,7 @@ module Matrix =
         and 'nCols :> Natural>
             : Matrix<'t, 'nRows, 'nCols> =
         Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
-            |> MkMatrix
+            |> create
 
     let init<'t, 'nRows, 'nCols
         when 't :> INumber<'t>
@@ -29,7 +31,7 @@ module Matrix =
         and 'nCols :> Natural> initializer
             : Matrix<'t, 'nRows, 'nCols> =
         Array2D.init<'t> 'nRows.Size 'nCols.Size initializer
-            |> MkMatrix
+            |> create
 
     let transpose<'t, 'nRows, 'nCols
         when 't :> INumber<'t>
