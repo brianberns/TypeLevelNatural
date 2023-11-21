@@ -2,5 +2,8 @@
 
 module Program =
 
-    let m = Matrix.zeroCreate<int, Nat3, Nat2>
-    printfn "%A" (Matrix.transpose m)
+    let m = Matrix.init<int, Nat3, Nat2> (fun iRow iCol -> iRow + iCol)
+    printfn "%A" m
+
+    let m' = Matrix.transpose m
+    printfn "%A" m'
