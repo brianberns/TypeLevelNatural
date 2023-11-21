@@ -2,5 +2,5 @@
 
 module Program =
 
-    let v = Matrix.zeroCreate<int, Nat1200, Nat1200>
-    printfn "%A" v
+    let m = Matrix.zeroCreate<int, Nat3, Nat2>
+    printfn "%A" (Matrix.transpose m)

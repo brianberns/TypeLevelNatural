@@ -1,7 +1,12 @@
 ﻿namespace TypeLevelNatural
 
 type Vector<'t, 'nCols when 'nCols :> Natural> =
-    private MkVector of 't[]
+    private MkVector of 't[] with
+    
+    member vector.Item
+        with get(i) =
+            let (MkVector values) = vector
+            values[i]
 
 module Vector =
 
