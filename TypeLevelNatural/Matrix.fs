@@ -47,3 +47,8 @@ type Matrix<'t, 'nRows, 'nCols
         : Matrix<'t, 'nRows, 'nCols> =
         Matrix.init (fun iRow iCol ->
             a[iRow, iCol] + b[iRow, iCol])
+
+    static member (-)(a : Matrix<'t, 'nRows, 'nCols>, b : Matrix<'t, 'nRows, 'nCols>)
+        : Matrix<'t, 'nRows, 'nCols> =
+        Matrix.init (fun iRow iCol ->
+            a[iRow, iCol] - b[iRow, iCol])
