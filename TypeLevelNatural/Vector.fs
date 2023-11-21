@@ -11,31 +11,19 @@ type Vector<'t, 'n
         with get(i) =
             vector.Values[i]
 
-module Vector =
-
-    let private create values =
+    static member private Create(values) : Vector<'t, 'n> =
         { Values = values }
 
-    let zeroCreate<'t, 'n
-        when 't :> INumber<'t>
-        and 'n :> Natural> : Vector<'t, 'n> =
+    static member ZeroCreate() =
         Array.zeroCreate<'t> 'n.Size
-            |> create
+            |> Vector<'t, 'n>.Create
 
-    let init<'t, 'n
-        when 't :> INumber<'t>
-        and 'n :> Natural> initializer : Vector<'t, 'n> =
+    static member Init(initializer) =
         Array.init<'t> 'n.Size initializer
-            |> create
+            |> Vector<'t, 'n>.Create
 
-type Vector<'t, 'n
-    when 't :> INumber<'t>
-    and 'n :> Natural> with
+    static member (+)(a : Vector<'t, 'n>, b : Vector<'t, 'n>) =
+        Vector<'t, 'n>.Init (fun i -> a[i] + b[i])
 
-    static member (+)(a : Vector<'t, 'n>, b : Vector<'t, 'n>)
-        : Vector<'t, 'n> =
-        Vector.init (fun i -> a[i] + b[i])
-
-    static member (-)(a : Vector<'t, 'n>, b : Vector<'t, 'n>)
-        : Vector<'t, 'n> =
-        Vector.init (fun i -> a[i] - b[i])
+    static member (-)(a : Vector<'t, 'n>, b : Vector<'t, 'n>) =
+        Vector<'t, 'n>.Init(fun i -> a[i] - b[i])

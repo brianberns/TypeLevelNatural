@@ -12,45 +12,40 @@ type Matrix<'t, 'nRows, 'nCols
         with get(iRow, iCol) =
             matrix.Values[iRow, iCol]
 
-module Matrix =
-
-    let private create values =
+    static member private Create(values) : Matrix<'t, 'nRows, 'nCols> =
         { Values = values }
 
-    let zeroCreate<'t, 'nRows, 'nCols
-        when 't :> INumber<'t>
-        and 'nRows :> Natural
-        and 'nCols :> Natural>
-            : Matrix<'t, 'nRows, 'nCols> =
+    static member ZeroCreate() =
         Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
-            |> create
+            |> Matrix<'t, 'nRows, 'nCols>.Create
 
-    let init<'t, 'nRows, 'nCols
-        when 't :> INumber<'t>
-        and 'nRows :> Natural
-        and 'nCols :> Natural> initializer
-            : Matrix<'t, 'nRows, 'nCols> =
+    static member Init(initializer) =
         Array2D.init<'t> 'nRows.Size 'nCols.Size initializer
-            |> create
+            |> Matrix<'t, 'nRows, 'nCols>.Create
 
-    let transpose<'t, 'nRows, 'nCols
-        when 't :> INumber<'t>
-        and 'nRows :> Natural
-        and 'nCols :> Natural> (matrix : Matrix<'t, 'nRows, 'nCols>)
-            : Matrix<'t, 'nCols, 'nRows> =
-        init (fun iRow iCol -> matrix[iCol, iRow])
+    member matrix.Transpose() =
+        Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol -> matrix[iCol, iRow])
 
-type Matrix<'t, 'nRows, 'nCols
-    when 't :> INumber<'t>
-    and 'nRows :> Natural
-    and 'nCols :> Natural> with
-
-    static member (+)(a : Matrix<'t, 'nRows, 'nCols>, b : Matrix<'t, 'nRows, 'nCols>)
-        : Matrix<'t, 'nRows, 'nCols> =
-        Matrix.init (fun iRow iCol ->
+    static member (+)(
+        a : Matrix<'t, 'nRows, 'nCols>,
+        b : Matrix<'t, 'nRows, 'nCols>) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
             a[iRow, iCol] + b[iRow, iCol])
 
-    static member (-)(a : Matrix<'t, 'nRows, 'nCols>, b : Matrix<'t, 'nRows, 'nCols>)
-        : Matrix<'t, 'nRows, 'nCols> =
-        Matrix.init (fun iRow iCol ->
+    static member (-)(
+        a : Matrix<'t, 'nRows, 'nCols>,
+        b : Matrix<'t, 'nRows, 'nCols>) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
             a[iRow, iCol] - b[iRow, iCol])
+
+    static member (*)(
+        n : 't,
+        a : Matrix<'t, 'nRows, 'nCols>) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
+            n * a[iRow, iCol])
+
+    static member (*)(
+        a : Matrix<'t, 'nRows, 'nCols>,
+        n : 't) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
+            a[iRow, iCol] * n)
