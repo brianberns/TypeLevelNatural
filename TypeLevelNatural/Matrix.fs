@@ -8,10 +8,6 @@ type Matrix<'t, 'nRows, 'nCols
     and 'nCols :> Natural> =
     private { Values : 't[,] }
 
-    member matrix.Item
-        with get(iRow, iCol) =
-            matrix.Values[iRow, iCol]
-
     static member private Create(values) : Matrix<'t, 'nRows, 'nCols> =
         { Values = values }
 
@@ -23,8 +19,21 @@ type Matrix<'t, 'nRows, 'nCols
         Array2D.init<'t> 'nRows.Size 'nCols.Size initializer
             |> Matrix<'t, 'nRows, 'nCols>.Create
 
+    member matrix.Item
+        with get(iRow, iCol) =
+            matrix.Values[iRow, iCol]
+
+    member matrix.Row(iRow) =
+        Vector<'t, 'nCols>.Init(fun iCol ->
+            matrix[iRow, iCol])
+
+    member matrix.Column(iCol) =
+        Vector<'t, 'nRows>.Init(fun iRow ->
+            matrix[iRow, iCol])
+
     member matrix.Transpose() =
-        Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol -> matrix[iCol, iRow])
+        Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol ->
+            matrix[iCol, iRow])
 
     static member (+)(
         a : Matrix<'t, 'nRows, 'nCols>,
@@ -49,3 +58,11 @@ type Matrix<'t, 'nRows, 'nCols
         n : 't) =
         Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
             a[iRow, iCol] * n)
+
+    static member (*)(
+        a : Matrix<'t, 'm, 'p>,
+        b : Matrix<'t, 'p, 'n>) =
+        Matrix<'t, 'm, 'n>.Init(fun iRow iCol ->
+            let row = a.Row(iRow)
+            let col = b.Column(iCol)
+            row * col)

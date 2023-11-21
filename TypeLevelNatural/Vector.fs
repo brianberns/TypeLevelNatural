@@ -27,3 +27,9 @@ type Vector<'t, 'n
 
     static member (-)(a : Vector<'t, 'n>, b : Vector<'t, 'n>) =
         Vector<'t, 'n>.Init(fun i -> a[i] - b[i])
+
+    static member (*)(a : Vector<'t, 'n>, b : Vector<'t, 'n>) =
+        seq {
+            for i =  0 to 'n.Size - 1 do
+                a[i] * b[i]
+        } |> Seq.sum
