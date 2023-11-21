@@ -1,6 +1,10 @@
 ﻿namespace TypeLevelNatural
 
-type Vector<'t, 'nCols when 'nCols :> Natural> =
+open System.Numerics
+
+type Vector<'t, 'n
+    when 't :> INumber<'t>
+    and 'n :> Natural> =
     private MkVector of 't[] with
     
     member vector.Item
@@ -10,10 +14,14 @@ type Vector<'t, 'nCols when 'nCols :> Natural> =
 
 module Vector =
 
-    let zeroCreate<'t, 'nCols when 'nCols :> Natural> : Vector<'t, 'nCols> =
-        Array.zeroCreate<'t> 'nCols.Size
+    let zeroCreate<'t, 'n
+        when 't :> INumber<'t>
+        and 'n :> Natural> : Vector<'t, 'n> =
+        Array.zeroCreate<'t> 'n.Size
             |> MkVector
 
-    let init<'t, 'nCols when 'nCols :> Natural> initializer : Vector<'t, 'nCols> =
-        Array.init<'t> 'nCols.Size initializer
+    let init<'t, 'n
+        when 't :> INumber<'t>
+        and 'n :> Natural> initializer : Vector<'t, 'n> =
+        Array.init<'t> 'n.Size initializer
             |> MkVector
