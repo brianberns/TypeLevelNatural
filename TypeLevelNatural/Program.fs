@@ -2,5 +2,5 @@
 
 module Program =
 
-    let v = Vector.zeroCreate<int, Nat1200>
+    let v = Matrix.zeroCreate<int, Nat1200, Nat1200>
     printfn "%A" v

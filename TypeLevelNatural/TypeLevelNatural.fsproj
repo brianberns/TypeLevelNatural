@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Natural.fs" />
     <Compile Include="Vector.fs" />
+    <Compile Include="Matrix.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

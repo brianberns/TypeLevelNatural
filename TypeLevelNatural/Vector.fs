@@ -12,6 +12,3 @@ module Vector =
     let init<'t, 'nCols when 'nCols :> Natural> initializer : Vector<'t, 'nCols> =
         Array.init<'t> 'nCols.Size initializer
             |> MkVector
-
-type Matrix<'t, 'nRows, 'nCols when 'nRows :> Natural and 'nCols :> Natural> =
-    private MkMatrix of 't[,]
