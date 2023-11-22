@@ -25,7 +25,7 @@ module Program =
         |> Option.map (fun c' -> 3.0 * c')
         |> printfn "%A"
 
-    /// https://t-redactyl.io/blog/2020/06/working-with-matrices-powers-and-transposition.html#:~:text=Powers%20of%20matrices%20follow%20the,n%3DAm%2Bn.
+    /// https://t-redactyl.io/blog/2020/06/working-with-matrices-powers-and-transposition.html
     let d =
         Matrix<_, Nat2, Nat2>.Init [|
             [| 4; 3 |]
