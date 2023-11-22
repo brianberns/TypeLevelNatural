@@ -2,25 +2,25 @@
 
 module Program =
 
+    /// https://www.cliffsnotes.com/study-guides/algebra/linear-algebra/matrix-algebra/operations-with-matrices
     let a =
-        let a =
-            [|
-                [|  1;  0; -3 |]
-                [| -2;  4;  1 |]
-            |]
-        Matrix<_, Nat2, Nat3>.Init(fun iRow iCol -> a[iRow][iCol])
+        Matrix<_, Nat2, Nat3>.Init [|
+            [|  1;  0; -3 |]
+            [| -2;  4;  1 |]
+        |]
     let b =
-        let b =
-            [|
-                [|  2; -1 |]
-                [|  3;  0 |]
-                [| -5;  2 |]
-            |]
-        Matrix<_, Nat3, Nat2>.Init(fun iRow iCol -> b[iRow][iCol])
+        Matrix<_, Nat3, Nat2>.Init [|
+            [|  2; -1 |]
+            [|  3;  0 |]
+            [| -5;  2 |]
+        |]
     printfn "%A" (a * b)
 
-    let m = Matrix<int, Nat3, Nat2>.Init (fun iRow iCol -> iRow + iCol)
-    printfn "%A" m
-
-    let m' = m + m
-    printfn "%A" m'
+    let c =
+        Matrix<_, Nat2, Nat2>.Init [|
+            [|  1.0;  -1.0 |]
+            [|  1.0;   2.0 |]
+        |]
+    Matrix.tryInvert c
+        |> Option.map (fun c' -> 3.0 * c')
+        |> printfn "%A"

@@ -2,6 +2,7 @@
 
 open System.Numerics
 
+/// https://ee263.stanford.edu/notes/matrix-primer-lect2.pdf
 type Matrix<'t, 'nRows, 'nCols
     when 't :> INumber<'t>
     and 'nRows :> Natural
@@ -11,12 +12,16 @@ type Matrix<'t, 'nRows, 'nCols
     static member private Create(values) : Matrix<'t, 'nRows, 'nCols> =
         { Values = values }
 
-    static member ZeroCreate() =
-        Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
-            |> Matrix<'t, 'nRows, 'nCols>.Create
-
     static member Init(initializer) =
         Array2D.init<'t> 'nRows.Size 'nCols.Size initializer
+            |> Matrix<'t, 'nRows, 'nCols>.Create
+
+    static member Init(values : 't[][]) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
+            values[iRow][iCol])
+
+    static member Zero =
+        Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
             |> Matrix<'t, 'nRows, 'nCols>.Create
 
     member matrix.Item
@@ -30,10 +35,6 @@ type Matrix<'t, 'nRows, 'nCols
     member matrix.Column(iCol) =
         Vector<'t, 'nRows>.Init(fun iRow ->
             matrix[iRow, iCol])
-
-    member matrix.Transpose() =
-        Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol ->
-            matrix[iCol, iRow])
 
     static member (+)(
         a : Matrix<'t, 'nRows, 'nCols>,
@@ -66,3 +67,36 @@ type Matrix<'t, 'nRows, 'nCols
             let row = a.Row(iRow)
             let col = b.Column(iCol)
             row * col)
+
+    static member (*)(
+        a : Matrix<'t, 'nRows, 'nCols>,
+        b : Vector<'t, 'nCols>) : Vector<'t, 'nRows> =
+        Vector<'t, 'nRows>.Init(fun iRow ->
+            a.Row(iRow) * b)
+
+    member matrix.Transpose() =
+        Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol ->
+            matrix[iCol, iRow])
+
+module Matrix =
+
+    let inline tryInvert<'t
+        when 't :> INumber<'t>
+        and 't : equality>
+        (matrix : Matrix<'t, Nat2, Nat2>)
+        : Option<Matrix<'t, Nat2, Nat2>> =
+        let a = matrix[0, 0]
+        let b = matrix[0, 1]
+        let c = matrix[1, 0]
+        let d = matrix[1, 1]
+        let den = a * d - b * c
+        if den = 't.Zero then
+            None
+        else
+            let m =
+                [|
+                    [|  d; -b |]
+                    [| -c;  a |]
+                |] |> Matrix<'t, Nat2, Nat2>.Init
+            Matrix<'t, Nat2, Nat2>.(*)('t.One / den, m)    // not sure why explicit member invocation is needed
+                |> Some
