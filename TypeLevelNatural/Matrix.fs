@@ -24,6 +24,10 @@ type Matrix<'t, 'nRows, 'nCols
         Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
             |> Matrix<'t, 'nRows, 'nCols>.Create
 
+    static member One =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
+            if iRow = iCol then 't.One else 't.Zero)
+
     member matrix.Item
         with get(iRow, iCol) =
             matrix.Values[iRow, iCol]
@@ -77,6 +81,10 @@ type Matrix<'t, 'nRows, 'nCols
     member matrix.Transpose() =
         Matrix<'t, 'nCols, 'nRows>.Init(fun iRow iCol ->
             matrix[iCol, iRow])
+
+    static member Pow(a : Matrix<'t, 'n, 'n>, b : int) =
+        (Matrix<'t, 'n, 'n>.One, Seq.replicate b a)
+            ||> Seq.fold (*)
 
 module Matrix =
 
