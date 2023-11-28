@@ -68,3 +68,18 @@ type TestClass() =
         Assert.AreEqual<_>(Some aInv, Matrix.tryInvert a)
         Assert.AreEqual<_>(Matrix.One, a * aInv)
         Assert.AreEqual<_>(Matrix.One, aInv * a)
+
+    /// https://t-redactyl.io/blog/2020/06/working-with-matrices-powers-and-transposition.html
+    [<TestMethod>]
+    member _.Power() =
+        let a =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [| 4; 3 |]
+                [| 6; 5 |]
+            |]
+        let a5 =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [| 22930; 18237 |]
+                [| 36474; 29009 |]
+            |]
+        Assert.AreEqual<_>(a5, a ** 5)
