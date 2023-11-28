@@ -154,12 +154,24 @@ type MatrixTests() =
 
     [<TestMethod>]
     member _.MultiplicationDistributes() =
-        let property (a : Matrix3x2) (b : Matrix3x2) (c : Matrix2x3) =
+
+        let property1 (a : Matrix3x2) (b : Matrix3x2) (c : Matrix2x3) =
             (a + b) * c = (a * c) + (b * c)
-        Check.One(config, property)
+        Check.One(config, property1)
+
+        let property2 (a : Matrix2x3) (b : Matrix3x2) (c : Matrix3x2) =
+            a * (b + c) = (a * b) + (a * c)
+        Check.One(config, property2)
 
     [<TestMethod>]
     member _.MultiplicationAssociates() =
         let property (a : Matrix3x2) (b : Matrix2x3) (c : Matrix3x3) =
             (a * b) * c = a * (b * c)
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.MultiplicativeIdentities() =
+        let property (a : Matrix2x2) =
+            (Matrix.Zero : Matrix2x2) * a = Matrix.Zero
+                && (Matrix.One : Matrix2x2) * a = a
         Check.One(config, property)
