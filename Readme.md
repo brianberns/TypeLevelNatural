@@ -7,7 +7,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
 <table>
     <thead>
         <tr>
-            <th>Code</th>
+            <th>F# code</th>
             <th>Result</th>
         </tr>
     </thead>
