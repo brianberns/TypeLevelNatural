@@ -5,6 +5,13 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TypeLevelNatural", "TypeLevelNatural\TypeLevelNatural.fsproj", "{0C9D0B75-514D-4758-B684-6BAA6478AD39}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EBE15D71-17F4-40FC-ACA1-553AC1BD064F}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TypeLevelNatural.Test", "TypeLevelNatural.Test\TypeLevelNatural.Test.fsproj", "{35565721-CEE7-456D-8B7D-C2738CDF3508}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{0C9D0B75-514D-4758-B684-6BAA6478AD39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C9D0B75-514D-4758-B684-6BAA6478AD39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C9D0B75-514D-4758-B684-6BAA6478AD39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35565721-CEE7-456D-8B7D-C2738CDF3508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35565721-CEE7-456D-8B7D-C2738CDF3508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35565721-CEE7-456D-8B7D-C2738CDF3508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35565721-CEE7-456D-8B7D-C2738CDF3508}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,8 @@
 
 /// Type-level interface that all natural numbers must implement.
 type Natural =
+
+    /// Corresponding value.
     static abstract Size : int
 
 /// Type zero.
@@ -16,7 +18,7 @@ type Successor<'n when 'n :> Natural>() =
     interface Natural with
         static member Size = 'n.Size + 1
 
-/// Define 1, 2, 3, ...
+// Define 1, 2, 3, ...
 type Nat1 = Successor<Nat0>
 type Nat2 = Successor<Nat1>
 type Nat3 = Successor<Nat2>
