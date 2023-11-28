@@ -17,6 +17,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
                 <code>let matrix3x2 = Matrix<int, Nat3, Nat2>.Init(+)</code>
             </td>
             <td>
+                <p>3 x 2 matrix:</p>
                 <code>{ Values = [[0; 1]
             [1; 2]
             [2; 3]] }</code>
@@ -27,6 +28,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
                 <code>let matrix2x4 = Matrix<int, Nat2, Nat4>.Init(+)</code>
             </td>
             <td>
+                <p>2 x 4 matrix:</p>
                 <code>{ Values = [[0; 1; 2; 3]
             [1; 2; 3; 4]] }</code>
             </td>
@@ -36,6 +38,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
                 <code>matrix3x2 * matrix2x4</code>
             </td>
             <td>
+                <p>3 x 4 matrix:</p>
                 <code>{ Values = [[1; 2; 3; 4]
             [2; 5; 8; 11]
             [3; 8; 13; 18]] }</code>
@@ -46,7 +49,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
                 <code>matrix2x4 * matrix3x2</code>
             </td>
             <td>
-                Compiler error!
+                <i>Compiler error!</i>
             </td>
         </tr>
     </tbody>
