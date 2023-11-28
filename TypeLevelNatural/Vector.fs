@@ -22,6 +22,9 @@ type Vector<'t, 'n
         Array.init<'t> 'n.Size initializer
             |> Vector<'t, 'n>.Create
 
+    static member Init(values : 't[]) =
+        Vector<'t, 'n>.Init(fun i -> values[i])
+
     static member (+)(a : Vector<'t, 'n>, b : Vector<'t, 'n>) =
         Vector<'t, 'n>.Init (fun i -> a[i] + b[i])
 

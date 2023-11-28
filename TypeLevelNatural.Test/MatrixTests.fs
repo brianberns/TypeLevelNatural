@@ -24,6 +24,17 @@ module Matrix =
 
     let invert = Matrix.tryInvert >> Option.get
 
+module Vector =
+
+    let arb<'t, 'n
+        when 't :> INumber<'t>
+        and 'n:> Natural> =
+        gen {
+            let! values =
+                Gen.arrayOfLength 'n.Size Generator.from<'t>
+            return Vector<'t, 'n>.Init(values)
+        } |> Arb.fromGen
+
 type Matrix3x2 = Matrix<int, Nat3, Nat2>
 type Matrix2x3 = Matrix<int, Nat2, Nat3>
 type Matrix2x2 = Matrix<int, Nat2, Nat2>
@@ -46,6 +57,8 @@ module InvertibleMatrix =
                 |] |> Invertible
         } |> Arb.fromGen
 
+type Vector2 = Vector<BigRational, Nat2>
+
 module BigRational =
 
     let arb =
@@ -61,6 +74,7 @@ type Arbitraries =
     static member Matrix2x2() = Matrix.arb<int, Nat2, Nat2>
     static member Matrix3x3() = Matrix.arb<int, Nat3, Nat3>
     static member InvertibleMatrix = InvertibleMatrix.arb
+    static member Vector2() = Vector.arb<BigRational, Nat2>
     static member BigRational = BigRational.arb
 
 /// https://www.cliffsnotes.com/study-guides/algebra/linear-algebra/matrix-algebra/operations-with-matrices
@@ -239,4 +253,11 @@ type MatrixTests() =
         let property (num : NonZeroInt) (den : NonZeroInt) (Invertible a) =
             let rat = BigRational num.Get / BigRational den.Get
             Matrix.invert (rat * a) = (BigRational 1 / rat) * Matrix.invert a
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.VectorInvert() =
+        let property (Invertible a) (x : Vector<BigRational, Nat2>) =
+            let y = a * x
+            x = (Matrix.invert a) * y
         Check.One(config, property)
