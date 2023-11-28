@@ -114,8 +114,18 @@ type MatrixTests() =
 
     [<TestMethod>]
     member _.TransposeTwiceIsOriginal() =
-
         let property (matrix : Matrix<int, Nat3, Nat2>) =
             matrix.Transpose().Transpose() = matrix
+        Check.One(config, property)
 
+    [<TestMethod>]
+    member _.AdditionCommutes() =
+        let property (a : Matrix<int, Nat3, Nat2>) (b : Matrix<int, Nat3, Nat2>) =
+            a + b = b + a
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.AdditionIsTransitive() =
+        let property (a : Matrix<int, Nat3, Nat2>) (b : Matrix<int, Nat3, Nat2>) (c : Matrix<int, Nat3, Nat2>) =
+            (a + b) + c = a + (b + c)
         Check.One(config, property)
