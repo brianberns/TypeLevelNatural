@@ -36,3 +36,35 @@ type TestClass() =
                 [| -9;  8; 17 |]
             |]
         Assert.AreEqual<_>(ba, b * a)
+
+    [<TestMethod>]
+    member _.Example18() =
+        let a =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [|  2;  3 |]
+                [|  5;  8 |]
+            |]
+        let aInv =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [|  8; -3 |]
+                [| -5;  2 |]
+            |]
+        Assert.AreEqual<_>(Some aInv, Matrix.tryInvert a)
+        Assert.AreEqual<_>(Matrix.One, a * aInv)
+        Assert.AreEqual<_>(Matrix.One, aInv * a)
+
+    [<TestMethod>]
+    member _.Example18Float() =
+        let a =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [|  2.;  3. |]
+                [|  5.;  8. |]
+            |]
+        let aInv =
+            Matrix<_, Nat2, Nat2>.Init [|
+                [|  8.; -3. |]
+                [| -5.;  2. |]
+            |]
+        Assert.AreEqual<_>(Some aInv, Matrix.tryInvert a)
+        Assert.AreEqual<_>(Matrix.One, a * aInv)
+        Assert.AreEqual<_>(Matrix.One, aInv * a)
