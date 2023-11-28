@@ -175,3 +175,9 @@ type MatrixTests() =
             (Matrix.Zero : Matrix2x2) * a = Matrix.Zero
                 && (Matrix.One : Matrix2x2) * a = a
         Check.One(config, property)
+
+    [<TestMethod>]
+    member _.MultiplicationTranspose() =
+        let property (a : Matrix3x2) (b : Matrix2x3) =
+            (a * b).Transpose() = b.Transpose() * a.Transpose()
+        Check.One(config, property)
