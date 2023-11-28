@@ -22,10 +22,16 @@ module Matrix =
             return Matrix<'t, 'nRows, 'nCols>.Init(values)
         } |> Arb.fromGen
 
-type TestMatrix = Matrix<int, Nat3, Nat2>
+type Matrix3x2 = Matrix<int, Nat3, Nat2>
+type Matrix2x3 = Matrix<int, Nat2, Nat3>
+type Matrix2x2 = Matrix<int, Nat2, Nat2>
+type Matrix3x3 = Matrix<int, Nat3, Nat3>
 
 type Arbitraries =
     static member Matrix3x2() = Matrix.arb<int, Nat3, Nat2>
+    static member Matrix2x3() = Matrix.arb<int, Nat2, Nat3>
+    static member Matrix2x2() = Matrix.arb<int, Nat2, Nat2>
+    static member Matrix3x3() = Matrix.arb<int, Nat3, Nat3>
 
 /// https://www.cliffsnotes.com/study-guides/algebra/linear-algebra/matrix-algebra/operations-with-matrices
 [<TestClass>]
@@ -116,25 +122,25 @@ type MatrixTests() =
 
     [<TestMethod>]
     member _.TransposeTwiceIsOriginal() =
-        let property (matrix : TestMatrix) =
+        let property (matrix : Matrix3x2) =
             matrix.Transpose().Transpose() = matrix
         Check.One(config, property)
 
     [<TestMethod>]
     member _.AdditionCommutes() =
-        let property (a : TestMatrix) (b : TestMatrix) =
+        let property (a : Matrix3x2) (b : Matrix3x2) =
             a + b = b + a
         Check.One(config, property)
 
     [<TestMethod>]
-    member _.AdditionIsTransitive() =
-        let property (a : TestMatrix) (b : TestMatrix) (c : TestMatrix) =
+    member _.AdditionAssociates() =
+        let property (a : Matrix3x2) (b : Matrix3x2) (c : Matrix3x2) =
             (a + b) + c = a + (b + c)
         Check.One(config, property)
 
     [<TestMethod>]
     member _.AdditiveIdentity() =
-        let property (a : TestMatrix) =
+        let property (a : Matrix3x2) =
             a + Matrix.Zero = a
                 && Matrix.Zero + a = a
                 && a - a = Matrix.Zero
@@ -142,6 +148,18 @@ type MatrixTests() =
 
     [<TestMethod>]
     member _.AdditionTranspose() =
-        let property (a : TestMatrix) (b : TestMatrix) =
+        let property (a : Matrix3x2) (b : Matrix3x2) =
             (a + b).Transpose() = a.Transpose() + b.Transpose()
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.MultiplicationDistributes() =
+        let property (a : Matrix3x2) (b : Matrix3x2) (c : Matrix2x3) =
+            (a + b) * c = (a * c) + (b * c)
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.MultiplicationAssociates() =
+        let property (a : Matrix3x2) (b : Matrix2x3) (c : Matrix3x3) =
+            (a * b) * c = a * (b * c)
         Check.One(config, property)
