@@ -1,11 +1,39 @@
 namespace TypeLevelNatural
 
-open System
+open System.Numerics
 open Microsoft.VisualStudio.TestTools.UnitTesting
+open FsCheck
+
+module Generator =
+
+    let from<'t> = Arb.from<'t>.Generator   // is there a better way to get this?
+
+module Matrix =
+
+    let arb<'t, 'nRows, 'nCols
+        when 't :> INumber<'t>
+        and 'nRows :> Natural
+        and 'nCols :> Natural> =
+        gen {
+            let! values =
+                Gen.array2DOfDim
+                    ('nRows.Size, 'nCols.Size)
+                    Generator.from<'t>
+            return Matrix<'t, 'nRows, 'nCols>.Init(values)
+        } |> Arb.fromGen
+
+type Arbitraries =
+    static member Matrix3x2() = Matrix.arb<int, Nat3, Nat2>
 
 /// https://www.cliffsnotes.com/study-guides/algebra/linear-algebra/matrix-algebra/operations-with-matrices
 [<TestClass>]
-type TestClass() =
+type MatrixTests() =
+
+    let config =
+        { Config.QuickThrowOnFailure with
+            Arbitrary = [ typeof<Arbitraries> ]
+            MaxTest = 1000
+            Replay = Some (Random.StdGen (0, 0)) }
 
     [<TestMethod>]
     member _.Example9() =
@@ -83,3 +111,11 @@ type TestClass() =
                 [| 36474; 29009 |]
             |]
         Assert.AreEqual<_>(a5, a ** 5)
+
+    [<TestMethod>]
+    member _.TransposeTwiceIsOriginal() =
+
+        let property (matrix : Matrix<int, Nat3, Nat2>) =
+            matrix.Transpose().Transpose() = matrix
+
+        Check.One(config, property)

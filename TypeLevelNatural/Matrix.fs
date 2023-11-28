@@ -20,6 +20,10 @@ type Matrix<'t, 'nRows, 'nCols
         Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
             values[iRow][iCol])
 
+    static member Init(values : 't[,]) =
+        Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
+            values[iRow, iCol])
+
     static member Zero =
         Array2D.zeroCreate<'t> 'nRows.Size 'nCols.Size
             |> Matrix<'t, 'nRows, 'nCols>.Create
