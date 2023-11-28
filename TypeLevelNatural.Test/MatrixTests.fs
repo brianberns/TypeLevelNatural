@@ -22,6 +22,8 @@ module Matrix =
             return Matrix<'t, 'nRows, 'nCols>.Init(values)
         } |> Arb.fromGen
 
+type TestMatrix = Matrix<int, Nat3, Nat2>
+
 type Arbitraries =
     static member Matrix3x2() = Matrix.arb<int, Nat3, Nat2>
 
@@ -114,18 +116,32 @@ type MatrixTests() =
 
     [<TestMethod>]
     member _.TransposeTwiceIsOriginal() =
-        let property (matrix : Matrix<int, Nat3, Nat2>) =
+        let property (matrix : TestMatrix) =
             matrix.Transpose().Transpose() = matrix
         Check.One(config, property)
 
     [<TestMethod>]
     member _.AdditionCommutes() =
-        let property (a : Matrix<int, Nat3, Nat2>) (b : Matrix<int, Nat3, Nat2>) =
+        let property (a : TestMatrix) (b : TestMatrix) =
             a + b = b + a
         Check.One(config, property)
 
     [<TestMethod>]
     member _.AdditionIsTransitive() =
-        let property (a : Matrix<int, Nat3, Nat2>) (b : Matrix<int, Nat3, Nat2>) (c : Matrix<int, Nat3, Nat2>) =
+        let property (a : TestMatrix) (b : TestMatrix) (c : TestMatrix) =
             (a + b) + c = a + (b + c)
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.AdditiveIdentity() =
+        let property (a : TestMatrix) =
+            a + Matrix.Zero = a
+                && Matrix.Zero + a = a
+                && a - a = Matrix.Zero
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.AdditionTranspose() =
+        let property (a : TestMatrix) (b : TestMatrix) =
+            (a + b).Transpose() = a.Transpose() + b.Transpose()
         Check.One(config, property)
