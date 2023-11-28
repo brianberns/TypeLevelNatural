@@ -39,7 +39,7 @@ module InvertibleMatrix =
                 Generator.from<BigRational>
                     |> Gen.four 
                     |> Gen.where (fun (a, b, c, d) ->
-                        a * d - b * c <> BigRational(0))
+                        a * d - b * c <> BigRational 0)
             return
                 Matrix<BigRational, Nat2, Nat2>.Init [|
                     [| a; b |]; [| c; d |]
@@ -216,4 +216,27 @@ type MatrixTests() =
     member _.InvertTwiceIsOriginal() =
         let property (Invertible a) =
             a |> Matrix.invert |> Matrix.invert = a
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.MultiplicationInvert() =
+        let property (Invertible a) (Invertible b) =
+            Matrix.invert (a * b) = Matrix.invert b * Matrix.invert a
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.TransposeInvert() =
+        let property (Invertible a) =
+            Matrix.invert (a.Transpose()) = (Matrix.invert a).Transpose()
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.IdentityInvert() =
+        Assert.AreEqual<_>(Matrix.One, Matrix.invert Matrix.One)
+
+    [<TestMethod>]
+    member _.ReciprocalInvert() =
+        let property (num : NonZeroInt) (den : NonZeroInt) (Invertible a) =
+            let rat = BigRational num.Get / BigRational den.Get
+            Matrix.invert (rat * a) = (BigRational 1 / rat) * Matrix.invert a
         Check.One(config, property)
