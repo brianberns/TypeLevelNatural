@@ -2,6 +2,7 @@
 
 open System.Numerics
 
+/// Matrix type with compile-time size.
 /// https://ee263.stanford.edu/notes/matrix-primer-lect2.pdf
 type Matrix<'t, 'nRows, 'nCols
     when 't :> INumber<'t>
@@ -31,6 +32,8 @@ type Matrix<'t, 'nRows, 'nCols
     static member One =
         Matrix<'t, 'nRows, 'nCols>.Init(fun iRow iCol ->
             if iRow = iCol then 't.One else 't.Zero)
+
+    static member Identity = Matrix<'t, 'nRows, 'nCols>.One
 
     member matrix.Item
         with get(iRow, iCol) =

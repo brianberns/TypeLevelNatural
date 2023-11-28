@@ -2,6 +2,7 @@
 
 open System.Numerics
 
+/// Vector type with compile-time size.
 type Vector<'t, 'n
     when 't :> INumber<'t>
     and 'n :> Natural> =
@@ -14,7 +15,7 @@ type Vector<'t, 'n
     static member private Create(values) : Vector<'t, 'n> =
         { Values = values }
 
-    static member ZeroCreate() =
+    static member Zero =
         Array.zeroCreate<'t> 'n.Size
             |> Vector<'t, 'n>.Create
 
