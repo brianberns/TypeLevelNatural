@@ -92,6 +92,7 @@ type Matrix<'t, 'nRows, 'nCols
 
 module Matrix =
 
+    /// Warning: Doesn't work for integers.
     let inline tryInvert<'t
         when 't :> INumber<'t>
         and 't : equality>

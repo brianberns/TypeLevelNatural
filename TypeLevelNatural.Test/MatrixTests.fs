@@ -22,16 +22,46 @@ module Matrix =
             return Matrix<'t, 'nRows, 'nCols>.Init(values)
         } |> Arb.fromGen
 
+    let invert = Matrix.tryInvert >> Option.get
+
 type Matrix3x2 = Matrix<int, Nat3, Nat2>
 type Matrix2x3 = Matrix<int, Nat2, Nat3>
 type Matrix2x2 = Matrix<int, Nat2, Nat2>
 type Matrix3x3 = Matrix<int, Nat3, Nat3>
+
+type InvertibleMatrix = Invertible of Matrix<BigRational, Nat2, Nat2>
+
+module InvertibleMatrix =
+
+    let arb =
+        gen {
+            let! a, b, c, d =
+                Generator.from<BigRational>
+                    |> Gen.four 
+                    |> Gen.where (fun (a, b, c, d) ->
+                        a * d - b * c <> BigRational(0))
+            return
+                Matrix<BigRational, Nat2, Nat2>.Init [|
+                    [| a; b |]; [| c; d |]
+                |] |> Invertible
+        } |> Arb.fromGen
+
+module BigRational =
+
+    let arb =
+        gen {
+            let! num = Generator.from<int>
+            let! den = Generator.from<NonZeroInt>
+            return BigRational(num) / BigRational(den.Get)
+        } |> Arb.fromGen
 
 type Arbitraries =
     static member Matrix3x2() = Matrix.arb<int, Nat3, Nat2>
     static member Matrix2x3() = Matrix.arb<int, Nat2, Nat3>
     static member Matrix2x2() = Matrix.arb<int, Nat2, Nat2>
     static member Matrix3x3() = Matrix.arb<int, Nat3, Nat3>
+    static member InvertibleMatrix = InvertibleMatrix.arb
+    static member BigRational = BigRational.arb
 
 /// https://www.cliffsnotes.com/study-guides/algebra/linear-algebra/matrix-algebra/operations-with-matrices
 [<TestClass>]
@@ -180,4 +210,10 @@ type MatrixTests() =
     member _.MultiplicationTranspose() =
         let property (a : Matrix3x2) (b : Matrix2x3) =
             (a * b).Transpose() = b.Transpose() * a.Transpose()
+        Check.One(config, property)
+
+    [<TestMethod>]
+    member _.InvertTwiceIsOriginal() =
+        let property (Invertible a) =
+            a |> Matrix.invert |> Matrix.invert = a
         Check.One(config, property)
