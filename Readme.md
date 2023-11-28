@@ -14,7 +14,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
     <tbody>
         <tr>
             <td>
-                <code>let matrix3x2 = Matrix<int, Nat3, Nat2>.Init(+)</code>
+                <code>let matrix3x2 = Matrix&lt;int, Nat3, Nat2&gt;.Init(+)</code>
             </td>
             <td>
                 <p>3 x 2 matrix:</p>
@@ -25,7 +25,7 @@ Have you ever wanted to type-check your matrix multiplication? You can do that w
         </tr>
         <tr>
             <td>
-                <code>let matrix2x4 = Matrix<int, Nat2, Nat4>.Init(+)</code>
+                <code>let matrix2x4 = Matrix&lt;int, Nat2, Nat4&gt;.Init(+)</code>
             </td>
             <td>
                 <p>2 x 4 matrix:</p>
